@@ -4,11 +4,11 @@ import 'package:subgkart_delivery/data.dart';
 class DataProvider {
   final db = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot> order() {
+  Stream<QuerySnapshot> orderTobeDelivered() {
     return db
         .collection('Orders')
         .where('deliveryBoy', isEqualTo: UserAuth().user?.uid)
-        .where('status', isEqualTo: 'Order PickedUp')
+        .where('status', isEqualTo: 'Order Accepted')
         .snapshots();
   }
 

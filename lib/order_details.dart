@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 // import 'package:geocoder/geocoder.dart';
 import 'package:geocoder_buddy/geocoder_buddy.dart';
 import 'data_provider.dart';
+import 'items_details.dart';
 
 class OrderDetails extends StatefulWidget {
   final DocumentSnapshot snapshot;
@@ -47,13 +48,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                       onPressed: () async {
                         var addresses = await GeocoderBuddy.query(
                             snapshot.data?['address']);
+                        print("address captured from client");
+                        print(addresses.first.lat);
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) => LiveTracking(
                                       destination: LatLng(
-                                          addresses.first.lat as double,
-                                          addresses.first.lon as double),
+                                          double.parse(addresses.first.lat),
+                                          double.parse(addresses.first.lon)),
                                     )));
                       })
                 ],
@@ -81,7 +84,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 style: GoogleFonts.poppins(color: Colors.black),
                               ),
                               Text(
-                                widget.snapshot.get('booking'),
+                                widget.snapshot.get('booking').toString(),
                                 style: GoogleFonts.poppins(
                                     color: Colors.grey.shade400),
                               )
@@ -176,154 +179,161 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   itemCount: snapshot.data?.docs.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Container(
-                                      color: Colors.white,
-                                      padding: EdgeInsets.only(bottom: 2),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 4,
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.18,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.3,
-                                                child: Stack(
-                                                  children: [
-                                                    Positioned(
-                                                        top: 0,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: snapshot.data?.docs[index]['image'] != null &&
-                                                                  snapshot
-                                                                      .data
-                                                                      ?.docs[index][
-                                                                          'image']
-                                                                      .isNotEmpty
-                                                              ? CachedNetworkImage(
-                                                                  imageUrl: snapshot.data?.docs[index]
-                                                                      ['image'],
-                                                                  height: MediaQuery.of(context)
-                                                                          .size
-                                                                          .height *
-                                                                      0.18,
-                                                                  width: MediaQuery.of(context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.3,
-                                                                  fit: BoxFit
-                                                                      .contain)
-                                                              : Container(
-                                                                  alignment: Alignment.center,
-                                                                  height: MediaQuery.of(context).size.height * 0.18,
-                                                                  width: MediaQuery.of(context).size.width * 0.3,
-                                                                  child: Icon(Icons.photo_size_select_actual_outlined)),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                                flex: 6,
-                                                child: Column(
-                                                  children: [
-                                                    ListTile(
-                                                      title: Text(
-                                                        '${snapshot.data?.docs[index]['name']}',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                                fontSize: 18.0,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                letterSpacing:
-                                                                    0.5),
-                                                      ),
-                                                      subtitle: Text(
-                                                        snapshot.data?.docs[
-                                                                    index][
-                                                                'description'] ??
-                                                            'Price for ${snapshot.data?.docs[index]['quantity']}',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                                fontSize: 14.0),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade300),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        4)),
-                                                        padding:
-                                                            EdgeInsets.all(6),
-                                                        child: Text(
-                                                          '${snapshot.data?.docs[index]['quantity']}',
-                                                          style: GoogleFonts
-                                                              .poppins(),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 8,
-                                                              right: 8,
-                                                              top: 4),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                              '₹${snapshot.data?.docs[index]['price']}X${snapshot.data?.docs[index]['pieces']} = ',
-                                                              style: GoogleFonts.poppins(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  color: Colors
-                                                                      .black)),
-                                                          Text(
-                                                              '₹${snapshot.data?.docs[index]['total']}',
-                                                              style: GoogleFonts.poppins(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .green)),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 4,
-                                                    )
-                                                  ],
-                                                ))
-                                          ]),
+                                    Map<String, dynamic> data =
+                                        snapshot.data!.docs[index].data()
+                                            as Map<String, dynamic>;
+                                    // return Text("Full Name: ${data['image']} ");
+                                    return ItemsDetails(
+                                      data: data,
                                     );
+                                    // return Container(
+                                    //   color: Colors.white,
+                                    //   padding: EdgeInsets.only(bottom: 2),
+                                    //   child: Row(
+                                    //       mainAxisAlignment:
+                                    //           MainAxisAlignment.start,
+                                    //       crossAxisAlignment:
+                                    //           CrossAxisAlignment.start,
+                                    //       children: <Widget>[
+                                    //         Expanded(
+                                    //           flex: 4,
+                                    //           child: Container(
+                                    //             height: MediaQuery.of(context)
+                                    //                     .size
+                                    //                     .height *
+                                    //                 0.18,
+                                    //             width: MediaQuery.of(context)
+                                    //                     .size
+                                    //                     .width *
+                                    //                 0.3,
+                                    //             child: Stack(
+                                    //               children: [
+                                    //                 Positioned(
+                                    //                     top: 0,
+                                    //                     child: Padding(
+                                    //                       padding:
+                                    //                           const EdgeInsets
+                                    //                               .all(8.0),
+                                    //                       child: snapshot.data?.docs[index]['image'] != null &&
+                                    //                               snapshot
+                                    //                                   .data
+                                    //                                   ?.docs[index][
+                                    //                                       'image']
+                                    //                                   .isNotEmpty
+                                    //                           ? CachedNetworkImage(
+                                    //                               imageUrl: snapshot.data?.docs[index]
+                                    //                                   ['image'],
+                                    //                               height: MediaQuery.of(context)
+                                    //                                       .size
+                                    //                                       .height *
+                                    //                                   0.18,
+                                    //                               width: MediaQuery.of(context)
+                                    //                                       .size
+                                    //                                       .width *
+                                    //                                   0.3,
+                                    //                               fit: BoxFit
+                                    //                                   .contain)
+                                    //                           : Container(
+                                    //                               alignment: Alignment.center,
+                                    //                               height: MediaQuery.of(context).size.height * 0.18,
+                                    //                               width: MediaQuery.of(context).size.width * 0.3,
+                                    //                               child: Icon(Icons.photo_size_select_actual_outlined)),
+                                    //                     )),
+                                    //               ],
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //         Expanded(
+                                    //             flex: 6,
+                                    //             child: Column(
+                                    //               children: [
+                                    //                 ListTile(
+                                    //                   title: Text(
+                                    //                     '${snapshot.data?.docs[index]['name']}',
+                                    //                     style:
+                                    //                         GoogleFonts.poppins(
+                                    //                             fontSize: 18.0,
+                                    //                             color: Colors
+                                    //                                 .black,
+                                    //                             fontWeight:
+                                    //                                 FontWeight
+                                    //                                     .w500,
+                                    //                             letterSpacing:
+                                    //                                 0.5),
+                                    //                   ),
+                                    //                   subtitle: Text(
+                                    //                     snapshot.data?.docs[
+                                    //                                 index][
+                                    //                             'description'] ??
+                                    //                         'Price for ${snapshot.data?.docs[index]['quantity']}',
+                                    //                     style:
+                                    //                         GoogleFonts.poppins(
+                                    //                             fontSize: 14.0),
+                                    //                   ),
+                                    //                 ),
+                                    //                 Padding(
+                                    //                   padding:
+                                    //                       const EdgeInsets.all(
+                                    //                           8.0),
+                                    //                   child: Container(
+                                    //                     width: MediaQuery.of(
+                                    //                             context)
+                                    //                         .size
+                                    //                         .width,
+                                    //                     decoration: BoxDecoration(
+                                    //                         border: Border.all(
+                                    //                             color: Colors
+                                    //                                 .grey
+                                    //                                 .shade300),
+                                    //                         borderRadius:
+                                    //                             BorderRadius
+                                    //                                 .circular(
+                                    //                                     4)),
+                                    //                     padding:
+                                    //                         EdgeInsets.all(6),
+                                    //                     child: Text(
+                                    //                       '${snapshot.data?.docs[index]['quantity']}',
+                                    //                       style: GoogleFonts
+                                    //                           .poppins(),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 Padding(
+                                    //                   padding:
+                                    //                       const EdgeInsets.only(
+                                    //                           left: 8,
+                                    //                           right: 8,
+                                    //                           top: 4),
+                                    //                   child: Row(
+                                    //                     children: [
+                                    //                       Text(
+                                    //                           '₹${snapshot.data?.docs[index]['price']}X${snapshot.data?.docs[index]['pieces']} = ',
+                                    //                           style: GoogleFonts.poppins(
+                                    //                               fontSize: 18,
+                                    //                               fontWeight:
+                                    //                                   FontWeight
+                                    //                                       .normal,
+                                    //                               color: Colors
+                                    //                                   .black)),
+                                    //                       Text(
+                                    //                           '₹${snapshot.data?.docs[index]['total']}',
+                                    //                           style: GoogleFonts.poppins(
+                                    //                               fontSize: 18,
+                                    //                               fontWeight:
+                                    //                                   FontWeight
+                                    //                                       .bold,
+                                    //                               color: Colors
+                                    //                                   .green)),
+                                    //                     ],
+                                    //                   ),
+                                    //                 ),
+                                    //                 SizedBox(
+                                    //                   height: 4,
+                                    //                 )
+                                    //               ],
+                                    //             ))
+                                    //       ]),
+                                    // );
                                   },
                                 );
                               }
@@ -483,27 +493,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     onPressed: () async {},
                                     style: ElevatedButton.styleFrom(
                                       elevation: 0,
-                                      backgroundColor: Colors.green.withOpacity(0.5),
+                                      backgroundColor:
+                                          Colors.green.withOpacity(0.5),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(80.0)),
                                     ),
                                     child: Padding(
-                          padding: EdgeInsets.all(0.0),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "${snapshot.data?['status']}",
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                                      padding: EdgeInsets.all(0.0),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "${snapshot.data?['status']}",
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
                         SizedBox(height: 20),
                       ],
                     ),

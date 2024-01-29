@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
         actions: [],
       ),
       body: StreamBuilder<QuerySnapshot>(
-          stream: dataProvider.order(),
+          stream: dataProvider.orderTobeDelivered(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return snapshot.data!.docs.length > 0
@@ -183,31 +183,35 @@ class _HomeState extends State<Home> {
                         );
                       },
                     )
-                  : Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CachedNetworkImage(
-                              imageUrl:
-                                  'https://firebasestorage.googleapis.com/v0/b/atus-kart.appspot.com/o/static%2Fbasket.png?alt=media&token=4ca7a331-90d3-4ce0-8113-0226e577085e',
-                              width: 120,
-                              height: 120),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8, top: 12),
-                            child: Text('No items in your cart!',
-                                style: TextStyle(color: Colors.grey)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 60, right: 60),
-                            child: Text(
-                              "We are looking to provide our services for you",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
+                  : Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CachedNetworkImage(
+                                imageUrl:
+                                    'https://firebasestorage.googleapis.com/v0/b/atus-kart.appspot.com/o/static%2Fbasket.png?alt=media&token=4ca7a331-90d3-4ce0-8113-0226e577085e',
+                                width: 120,
+                                height: 120),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(bottom: 8, top: 12),
+                              child: Text('No items in your cart!',
+                                  style: TextStyle(color: Colors.grey)),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 60, right: 60),
+                              child: Text(
+                                "We are looking to provide our services for you",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
             }
@@ -248,6 +252,8 @@ class _HomeState extends State<Home> {
                               child: snapshot.data?['image'] != null &&
                                       snapshot.data?['image'].isNotEmpty
                                   ? CachedNetworkImage(
+                                      // snapshot.data?.docs[index]
+                                      //           ['image']
                                       imageUrl: snapshot.data?['image'],
                                       fit: BoxFit.contain,
                                     )
