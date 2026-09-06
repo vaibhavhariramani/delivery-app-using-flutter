@@ -1,31 +1,54 @@
 # Local Bazaar Delivery
 
-Local Bazaar Delivery is a Flutter delivery-rider app for local bazaar/marketplace orders. Riders sign in, see incoming orders, and track each delivery to its destination on a live map.
+A GetX-based Flutter app for Local Bazaar delivery riders: go online, see nearby deliveries, accept one, navigate to the shop and customer, confirm pickup/delivery, and track earnings.
 
-## Features
+Part of the [Local Bazaar](https://github.com/vaibhavhariramani/local-bazaar) platform — shares one Firebase project with the Admin panel and Client app. See that repo's `docs/architecture/` for the cross-app data model and order lifecycle this app participates in.
 
-- **Order feed** – Riders see active orders assigned to them, backed by Cloud Firestore in real time.
-- **New delivery alerts** – Firebase Cloud Messaging notifies the rider when a new delivery is assigned.
-- **Live location tracking** – Each order carries the drop-off latitude/longitude; the rider's live position and the destination are plotted on a Google Map with a driving route drawn between them.
-- **Turn-by-turn directions** – From the order details screen, the rider can jump straight into live tracking/navigation toward the customer's address.
-- **Order lifecycle** – Riders can mark an order as picked up and completed as the delivery progresses.
+## What's actually implemented
 
-## Tech stack
+Every item below is real, working code — not aspirational. (An earlier version of this README claimed FCM alerts and turn-by-turn navigation that didn't exist in code at all; this one only lists what's true today.)
 
-- Flutter / Dart
-- Firebase (Auth, Firestore, Realtime Database, Cloud Messaging)
-- Google Maps (`google_maps_flutter`, `google_map_polyline_new`) for live tracking and route polylines
-- `location` / `geolocator` for device GPS, `geocoder_buddy` for address-to-coordinates lookup
+- **Sign in** — email/password against an existing rider account (`Users/{uid}.userType == 'RIDER'`). No self-registration; rider accounts are provisioned by shop/platform staff.
+- **Online/offline toggle** — going online starts sharing location (`Riders/{uid}`, movement-threshold + max-interval throttled, see `lib/services/rider_service.dart`) and surfaces you in the nearby-deliveries feed and push notifications.
+- **Available deliveries feed** — orders that are `ready_for_pickup` and unclaimed, with live distance from your last known location.
+- **Accept a delivery** — calls the `acceptDelivery` Cloud Function, which authoritatively checks you're within the platform's delivery radius (default 50km) before assigning the order to you — this isn't just a client-side check. See `docs/architecture/DELIVERY_RADIUS.md` in the master repo.
+- **Pickup / delivery confirmation** — advances the order through `rider_assigned → picked_up → out_for_delivery → delivered`.
+- **Navigate** — opens the shop's or customer's location in the device's default maps app (Google Maps / Apple Maps) rather than a custom in-app map — more reliable than reimplementing turn-by-turn.
+- **Earnings** — running total and completed-delivery count (`Riders/{uid}.totalEarnings`/`completedDeliveries`, incremented atomically alongside the delivery-confirmation write), plus delivery history.
+- **Real push notifications** — the `notifyNearbyRidersOnReadyForPickup` Cloud Function actually sends FCM to online, in-radius riders when a new order becomes available (foreground messages surface as an in-app banner; background/terminated get a system notification).
+- **Profile** — rider info, vehicle type, log out.
 
-## Getting Started
+## Not yet built
 
-This project is a starting point for a Flutter application.
+- Cancellation flow (no app can cancel an order yet, in any of the three apps).
+- Per-shop delivery radius override (currently platform-wide only).
+- Multiple simultaneous active deliveries UX (the data model supports it; the UI hasn't been stress-tested for a rider juggling more than one).
 
-A few resources to get you started if this is your first Flutter project:
+## Architecture
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+GetX, structured the same way as the Admin panel and Client app:
 
-For help getting started with Flutter, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+lib/
+  app/
+    bindings/        # RootBinding — app-wide service registration
+    modules/         # splash, auth, home (+ deliveries/earnings/profile tabs), order_detail
+    routes/
+  constants/         # order_status.dart, app_constants.dart
+  models/            # Rider, RiderStatus, DeliveryOrder, ShopLocation
+  services/          # AuthService, RiderService, OrdersService — GetxService singletons
+  theme/
+```
+
+## Firebase
+
+Targets the shared Local Bazaar project (`vaibhav-s-ecommerce-app`) — see `docs/firebase/` in the master repo for setup. Firestore security rules live in the Admin panel's repo (`firestore.rules`), since that's the single source of truth for the shared project's access control.
+
+## Running locally
+
+```bash
+flutter pub get
+flutter run
+```
+
+Requires a `Users/{uid}` document with `userType: 'RIDER'` to sign in as — there's no in-app way to create one (by design; see "Sign in" above).

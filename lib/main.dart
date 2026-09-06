@@ -1,75 +1,43 @@
-import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:local_bazaar_delivery/data.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+
+import 'app/bindings/root_binding.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
 import 'firebase_options.dart';
-import 'home.dart';
-import 'login.dart';
+import 'theme/app_theme.dart';
+
+/// Must be a top-level function (not a method) — this is how the platform
+/// wakes the app to hand it a push notification while it's backgrounded or
+/// fully closed.
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await GetStorage.init();
+  runApp(const LocalBazaarDeliveryApp());
 }
 
-class MyApp extends StatelessWidget {
+class LocalBazaarDeliveryApp extends StatelessWidget {
+  const LocalBazaarDeliveryApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      title: 'Local Bazaar Delivery',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Splash(),
-    );
-  }
-}
-
-class Splash extends StatefulWidget {
-  @override
-  _SplashState createState() => _SplashState();
-}
-
-class _SplashState extends State<Splash> {
-  Future _getData() async {
-    await UserAuth().getUser();
-    Timer(Duration(seconds: 4), () {
-      if (UserAuth().user != null) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LogIN()));
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getData();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-                child: Image.asset(
-              'assets/logo.png',
-              width: 200,
-              height: 200,
-            )),
-          ],
-        ),
-      ),
+      theme: AppTheme.light,
+      initialBinding: RootBinding(),
+      initialRoute: Routes.splash,
+      getPages: AppPages.pages,
     );
   }
 }

@@ -41,5 +41,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Local Bazaar Delivery uses your location to show you nearby deliveries and share your position with the shop and customer while you're online.</string>
 </dict>
 </plist>
