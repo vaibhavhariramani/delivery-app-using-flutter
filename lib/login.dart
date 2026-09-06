@@ -2,6 +2,7 @@ import 'package:local_bazaar_delivery/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LogIN extends StatefulWidget {
   const LogIN({Key? key}) : super(key: key);
@@ -125,7 +126,37 @@ class _LogINState extends State<LogIN> {
                         ),
                       ));
                     }
-                  })
+                  }),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.grey)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Text("OR",
+                          style: GoogleFonts.poppins(color: Colors.grey)),
+                    ),
+                    Expanded(child: Divider(color: Colors.grey)),
+                  ],
+                ),
+              ),
+              OutlinedButton.icon(
+                onPressed: _signInWithGoogle,
+                style: OutlinedButton.styleFrom(
+                  minimumSize:
+                      Size(MediaQuery.of(context).size.width * 0.9, 50),
+                  side: BorderSide(color: Color(0xff4CAF50)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                icon: Icon(Icons.g_mobiledata, color: Color(0xff4CAF50), size: 28),
+                label: Text("Continue with Google",
+                    style: GoogleFonts.poppins(
+                        color: Color(0xff4CAF50),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16)),
+              ),
             ],
           ),
         ),
@@ -153,6 +184,48 @@ class _LogINState extends State<LogIN> {
       Navigator.pop(context);
       // _scaffoldKey.currentState
       //     .showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.black,
+        content: Text(
+          e.toString(),
+          style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        ),
+      ));
+    }
+  }
+
+  Future _signInWithGoogle() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(child: CircularProgressIndicator());
+        },
+        barrierDismissible: false);
+    try {
+      final googleUser = await GoogleSignIn.instance.authenticate();
+      final googleAuth = googleUser.authentication;
+      final credential =
+          GoogleAuthProvider.credential(idToken: googleAuth.idToken);
+      var user =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      Navigator.pop(context);
+      if (user.user != null) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => Home()));
+      }
+    } on GoogleSignInException catch (e) {
+      Navigator.pop(context);
+      if (e.code != GoogleSignInExceptionCode.canceled) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.black,
+          content: Text(
+            'Google sign in failed: ${e.description ?? e.code}',
+            style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+          ),
+        ));
+      }
+    } catch (e) {
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.black,
         content: Text(
