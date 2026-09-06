@@ -44,3 +44,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/.cxx/
+
+# Secrets / local credentials - never commit these
+credentials.txt
+*.keystore
+*.jks
+key.properties

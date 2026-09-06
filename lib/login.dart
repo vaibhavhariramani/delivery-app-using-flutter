@@ -116,8 +116,7 @@ class _LogINState extends State<LogIN> {
                     } else {
                       // _scaffoldKey.currentState.showSnackBar(SnackBar(
                       //     content: Text('Please provide a valid information')));
-                      ScaffoldMessenger.of(context as BuildContext)
-                          .showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.black,
                         content: Text(
                           'Please provide a valid information',
@@ -154,7 +153,7 @@ class _LogINState extends State<LogIN> {
       Navigator.pop(context);
       // _scaffoldKey.currentState
       //     .showSnackBar(SnackBar(content: Text(e.toString())));
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.black,
         content: Text(
           e.toString(),

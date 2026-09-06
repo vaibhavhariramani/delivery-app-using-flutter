@@ -20,30 +20,18 @@ class _LiveTrackingState extends State<LiveTracking> {
   List<Polyline>? polyline = [];
   LocationData? _locationData;
   Location location = new Location();
-  var kGoogleApiKey = 'AIzaSyAUSjw7P0gXSx8zULJZ66zZH71_YrSvJBY';
+  var kGoogleApiKey = 'AIzaSyCW_so_r7fO1JPFN2e_boIYw5KVhFiF2rM';
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   GoogleMapPolyline _googleMapPolyline =
-      GoogleMapPolyline(apiKey: 'AIzaSyAUSjw7P0gXSx8zULJZ66zZH71_YrSvJBY');
+      GoogleMapPolyline(apiKey: 'AIzaSyCW_so_r7fO1JPFN2e_boIYw5KVhFiF2rM');
 
   Future _get() async {
     try {
       _locationData = await location.getLocation();
-      _latLng = LatLng(_locationData!.latitude!, _locationData!.longitude!);
+      _latLng = LatLng(_locationData!.latitude, _locationData!.longitude);
       location.onLocationChanged.listen((onData) => _locationData = onData);
       _controller?.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: _latLng!, zoom: 15)));
-      setState(() {});
-      getMark();
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future _getCurrent() async {
-    try {
-      _locationData = await location.getLocation();
-      _latLng = LatLng(_locationData!.latitude!, _locationData!.longitude!);
-      location.onLocationChanged.listen((onData) => _locationData = onData);
       setState(() {});
       getMark();
     } catch (e) {
@@ -109,37 +97,35 @@ class _LiveTrackingState extends State<LiveTracking> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      body: FutureBuilder<dynamic>(
-          future: _getCurrent(),
-          builder: (context, snapshot) {
-            return Stack(
-              children: <Widget>[
-                GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                      target: LatLng(17.261383, 78.385555),
-                      zoom: 12,
-                      bearing: 90.0,
-                      tilt: 45.0),
-                  mapType: MapType.terrain,
-                  markers: Set.of(markers),
-                  compassEnabled: false,
-                  myLocationEnabled: true,
-                  polylines: Set.of(polyline as Iterable<Polyline>),
-                  onMapCreated: (GoogleMapController control) async {
-                    setState(() {
-                      _controller = control;
-                      control.animateCamera(CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                              target: _latLng!,
-                              zoom: 15,
-                              bearing: 90.0,
-                              tilt: 45.0)));
-                    });
-                  },
-                ),
-              ],
-            );
-          }),
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+                target: LatLng(17.261383, 78.385555),
+                zoom: 12,
+                bearing: 90.0,
+                tilt: 45.0),
+            mapType: MapType.terrain,
+            markers: Set.of(markers),
+            compassEnabled: false,
+            myLocationEnabled: true,
+            polylines: Set.of(polyline ?? <Polyline>[]),
+            onMapCreated: (GoogleMapController control) async {
+              setState(() {
+                _controller = control;
+                if (_latLng != null) {
+                  control.animateCamera(CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                          target: _latLng!,
+                          zoom: 15,
+                          bearing: 90.0,
+                          tilt: 45.0)));
+                }
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 }

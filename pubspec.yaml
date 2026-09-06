@@ -56,7 +56,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  change_app_package_name: 
+  change_app_package_name:
+
+# permission_handler_android 14.x requires AGP 9 / Kotlin 2.3, far ahead of
+# this project's Android toolchain; pin to the last version built for AGP 8.
+dependency_overrides:
+  permission_handler_android: 13.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

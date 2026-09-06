@@ -291,7 +291,6 @@ class ProductLoader {
                 e['replace'],
                 e['id']))
             .toList();
-        catWiseProducts[category]?.notifyListeners;
       });
     }
   }
@@ -310,26 +309,27 @@ class ProductLoader {
           .limit(15)
           .get()
           .then((value) {
-            catWiseProducts[category]?.value.addAll(value.docs
-                .map((e) => Product(
-                    e['tag'],
-                    e['tags'],
-                    e['image'],
-                    e['name'],
-                    e['description'],
-                    e['mrp'],
-                    e['wholesale'],
-                    e['price'],
-                    e['offer'],
-                    e['quantity'],
-                    e['quantities'],
-                    e['stock'],
-                    e['seller'],
-                    e['delivery'],
-                    e['replace'],
-                    e['id']))
-                .toList());
-            catWiseProducts[category]?.notifyListeners();
+            final existing = catWiseProducts[category]?.value ?? [];
+            catWiseProducts[category]?.value = [
+              ...existing,
+              ...value.docs.map((e) => Product(
+                  e['tag'],
+                  e['tags'],
+                  e['image'],
+                  e['name'],
+                  e['description'],
+                  e['mrp'],
+                  e['wholesale'],
+                  e['price'],
+                  e['offer'],
+                  e['quantity'],
+                  e['quantities'],
+                  e['stock'],
+                  e['seller'],
+                  e['delivery'],
+                  e['replace'],
+                  e['id'])),
+            ];
             loading = false;
           });
     }
