@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:subgkart_delivery/data.dart';
+import 'package:vds_delivery/data.dart';
 
 class DataProvider {
   final db = FirebaseFirestore.instance;

@@ -75,6 +75,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'ecommerce-26b18.appspot.com',
     androidClientId: '348892999903-1s6rf99hed6cs3g5k7kmjo6grje0njnk.apps.googleusercontent.com',
     iosClientId: '348892999903-b7f25tsrsnsb4ndq7af4a63772nqmavc.apps.googleusercontent.com',
-    iosBundleId: 'com.diatus.subgkartDelivery',
+    iosBundleId: 'com.diatus.vdsDelivery',
   );
 }

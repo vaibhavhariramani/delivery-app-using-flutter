@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:subgkart_delivery/data.dart';
+import 'package:vds_delivery/data.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'home.dart';

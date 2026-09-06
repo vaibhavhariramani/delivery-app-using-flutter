@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vaibhav.deliveryapp">
    <application
-        android:label="subgkart_delivery"
+        android:label="VDS Delivery"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
