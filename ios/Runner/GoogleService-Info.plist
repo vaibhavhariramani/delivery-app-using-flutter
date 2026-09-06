@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>348892999903-b7f25tsrsnsb4ndq7af4a63772nqmavc.apps.googleusercontent.com</string>
+	<string>135817720188-dcu5tssskid6ol2salnm5uj40i2ngjmf.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.348892999903-b7f25tsrsnsb4ndq7af4a63772nqmavc</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>348892999903-1s6rf99hed6cs3g5k7kmjo6grje0njnk.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.135817720188-dcu5tssskid6ol2salnm5uj40i2ngjmf</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCr56oTn29jyaRVWfUZB8i2m1LSG2-nXGQ</string>
+	<string>AIzaSyAmyXoI36rVHsDRl4RE9j4JwWhedEX96pc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>348892999903</string>
+	<string>135817720188</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.diatus.localBazaarDelivery</string>
 	<key>PROJECT_ID</key>
-	<string>ecommerce-26b18</string>
+	<string>vaibhav-s-ecommerce-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ecommerce-26b18.appspot.com</string>
+	<string>vaibhav-s-ecommerce-app.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:348892999903:ios:7d17ab64d7414ca207796a</string>
+	<string>1:135817720188:ios:40b650ee4504c14da3b4f9</string>
 	<key>DATABASE_URL</key>
-	<string>https://ecommerce-26b18-default-rtdb.firebaseio.com</string>
+	<string>https://vaibhav-s-ecommerce-app.firebaseio.com</string>
 </dict>
 </plist>

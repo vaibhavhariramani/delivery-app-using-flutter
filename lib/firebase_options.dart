@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'this app does not ship a web build.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,35 +49,22 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDs-T4KfBq73VY_n6VOjzaU2Cxt2X7SrCQ',
-    appId: '1:348892999903:web:9bda8c495e670ab107796a',
-    messagingSenderId: '348892999903',
-    projectId: 'ecommerce-26b18',
-    authDomain: 'ecommerce-26b18.firebaseapp.com',
-    databaseURL: 'https://ecommerce-26b18-default-rtdb.firebaseio.com',
-    storageBucket: 'ecommerce-26b18.appspot.com',
-    measurementId: 'G-V2WQ3PW5XJ',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCW_so_r7fO1JPFN2e_boIYw5KVhFiF2rM',
-    appId: '1:348892999903:android:e78ad7153b805f9707796a',
-    messagingSenderId: '348892999903',
-    projectId: 'ecommerce-26b18',
-    databaseURL: 'https://ecommerce-26b18-default-rtdb.firebaseio.com',
-    storageBucket: 'ecommerce-26b18.appspot.com',
+    apiKey: 'AIzaSyC_YMZV4Zny306NUTmNNijeE7gCGs0eK4A',
+    appId: '1:135817720188:android:9328ba04d750dbe9a3b4f9',
+    messagingSenderId: '135817720188',
+    projectId: 'vaibhav-s-ecommerce-app',
+    databaseURL: 'https://vaibhav-s-ecommerce-app.firebaseio.com',
+    storageBucket: 'vaibhav-s-ecommerce-app.appspot.com',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCr56oTn29jyaRVWfUZB8i2m1LSG2-nXGQ',
-    appId: '1:348892999903:ios:7d17ab64d7414ca207796a',
-    messagingSenderId: '348892999903',
-    projectId: 'ecommerce-26b18',
-    databaseURL: 'https://ecommerce-26b18-default-rtdb.firebaseio.com',
-    storageBucket: 'ecommerce-26b18.appspot.com',
-    androidClientId: '348892999903-1s6rf99hed6cs3g5k7kmjo6grje0njnk.apps.googleusercontent.com',
-    iosClientId: '348892999903-b7f25tsrsnsb4ndq7af4a63772nqmavc.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAmyXoI36rVHsDRl4RE9j4JwWhedEX96pc',
+    appId: '1:135817720188:ios:40b650ee4504c14da3b4f9',
+    messagingSenderId: '135817720188',
+    projectId: 'vaibhav-s-ecommerce-app',
+    databaseURL: 'https://vaibhav-s-ecommerce-app.firebaseio.com',
+    storageBucket: 'vaibhav-s-ecommerce-app.appspot.com',
+    iosClientId: '135817720188-dcu5tssskid6ol2salnm5uj40i2ngjmf.apps.googleusercontent.com',
     iosBundleId: 'com.diatus.localBazaarDelivery',
   );
 }
