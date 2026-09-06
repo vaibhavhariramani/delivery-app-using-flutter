@@ -1,5 +1,5 @@
-name: subgkart_delivery
-description: A new Flutter application.
+name: local_bazaar_delivery
+description: Local Bazaar Delivery - a delivery rider tracking app.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
